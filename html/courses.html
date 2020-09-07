@@ -471,14 +471,18 @@
 	  
       var app = new Vue({
         el: "#container",
-        data: {},
+        data: {  
+          	allcoursedata:  [
+            ]
+		},
         computed: {
-          resultnum: function () {
-            return 1;
-          },
-          allcoursedata: function () {
-            return [
-              {
+			resultnum: function(){
+				return this.allcoursedata.length
+			}
+        },
+	  });
+	  
+	  app.allcoursedata = [ {
 				key: "course1",
                 title: "title 1",
                 photourl: "upload/courses/9.jpg",
@@ -519,11 +523,7 @@
                 photourl: "upload/courses/8.jpg",
                 price: 500,
                 teacher: "harry kwan",
-              },
-            ];
-          },
-        },
-      });
+              },]
 
     
     </script>

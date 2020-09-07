@@ -1,7 +1,5 @@
 // const stripe = require('stripe')('sk_test_CRl2Sto6lG7ZEjnvDIfJxtZx00uRtS3tJx');
-const stripe = require("stripe")(
-  "sk_test_51HNedQFJOpPbQF8CiFclhePMpdyceIk0886jYOow4jK9ln6ELWZeJkOafsilwYBN1j6C5LfCZKugFNDA8XraerQR0071jfcahg"
-);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 /** get the transaction amount, currency expected to be hkd, and a callback function */
 async function getclientsecret(amount, callback) {

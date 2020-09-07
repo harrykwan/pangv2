@@ -1,7 +1,9 @@
 const AWS = require("aws-sdk");
-const BUCKET_NAME = "3ninjas-profilepic";
-const IAM_USER_KEY = "AKIAT457LS74YL4GQEGS";
-const IAM_USER_SECRET = "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";
+const BUCKET_NAME = process.env.BUCKET_NAME;
+const IAM_USER_KEY = process.env.IAM_USER_KEY;
+const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
+console.log(process.env)
+console.log(IAM_USER_KEY,IAM_USER_SECRET)
 /** config the region and access key, access id */
 AWS.config.update({
   region: "ap-east-1",
@@ -19,7 +21,7 @@ let s3bucket = new AWS.S3({
 
 var dynamodb = new AWS.DynamoDB();
 var docClient = new AWS.DynamoDB.DocumentClient();
-/** upload to Amazon S3 */
+
 function uploadToS3(file, res, callback) {
   s3bucket.createBucket(function () {
     var params = {
@@ -43,7 +45,7 @@ function uploadToS3(file, res, callback) {
     });
   });
 }
-/** get photo from S3 server */
+
 function getphotofroms3(x, req, res) {
   var params = {
     Bucket: BUCKET_NAME,
@@ -58,61 +60,18 @@ function getphotofroms3(x, req, res) {
   });
 }
 
-/** upload a route */
-function uploadroute(req, res, next) {
-  // This grabs the additional parameters so in this case passing in
-  // "element1" with a value.
-  // const element1 = req.body.element1;
-
-  var busboy = new Busboy({
-    headers: req.headers,
-  });
-
-  // The file upload has completed
-  busboy.on("finish", function () {
-    console.log("Upload finished");
-    // console.log(req.file)
-    const file = req.files.myfile1;
-    // console.log(file);
-
-    // Begins the upload to the AWS S3
-    uploadToS3(file, res);
-  });
-
-  req.pipe(busboy);
-}
-/** upload a cv by user */
-function cvupload(req, res, next) {
-  var busboy = new Busboy({
-    headers: req.headers,
-  });
-
-  // The file upload has completed
-  busboy.on("finish", function () {
-    console.log("Upload finished");
-    // console.log(req.file)
-    const file = req.files.file;
-    // console.log(file);
-
-    // Begins the upload to the AWS S3
-    uploadToS3(file, res);
-  });
-
-  req.pipe(busboy);
-}
-/** create a table for uesr profile data, obsolete */
-function createtable_userprofiledata() {
+function createtable(tablename, keyname) {
   var params = {
-    TableName: "userprofiledata",
+    TableName: tablename,
     KeySchema: [
       {
-        AttributeName: "uid",
+        AttributeName: keyname,
         KeyType: "HASH",
       },
     ],
     AttributeDefinitions: [
       {
-        AttributeName: "uid",
+        AttributeName: keyname,
         AttributeType: "S",
       },
     ],
@@ -137,159 +96,8 @@ function createtable_userprofiledata() {
   });
 }
 
-/** create a table for uesr purchase, obsolete */
-function createtable_userpurchase() {
-  var params = {
-    TableName: "userpurchase",
-    KeySchema: [
-      {
-        AttributeName: "uid",
-        KeyType: "HASH",
-      },
-    ],
-    AttributeDefinitions: [
-      {
-        AttributeName: "uid",
-        AttributeType: "S",
-      },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 10,
-      WriteCapacityUnits: 10,
-    },
-  };
+// createtable('iguser', 'username')
 
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error(
-        "Unable to create table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(
-        "Created table. Table description JSON:",
-        JSON.stringify(data, null, 2)
-      );
-    }
-  });
-}
-
-/** create a table for video comments, obsolete */
-function createtable_videocomment() {
-  var params = {
-    TableName: "videocomment",
-    KeySchema: [
-      {
-        AttributeName: "vid",
-        KeyType: "HASH",
-      },
-    ],
-    AttributeDefinitions: [
-      {
-        AttributeName: "vid",
-        AttributeType: "S",
-      },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 10,
-      WriteCapacityUnits: 10,
-    },
-  };
-
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error(
-        "Unable to create table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(
-        "Created table. Table description JSON:",
-        JSON.stringify(data, null, 2)
-      );
-    }
-  });
-}
-
-/** create a table for course data, obsolete */
-function createtable_coursedata() {
-  var params = {
-    TableName: "coursedata",
-    KeySchema: [
-      {
-        AttributeName: "cid",
-        KeyType: "HASH",
-      },
-    ],
-    AttributeDefinitions: [
-      {
-        AttributeName: "cid",
-        AttributeType: "S",
-      },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 10,
-      WriteCapacityUnits: 10,
-    },
-  };
-
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error(
-        "Unable to create table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(
-        "Created table. Table description JSON:",
-        JSON.stringify(data, null, 2)
-      );
-    }
-  });
-}
-
-// createtable_coursedata()
-
-/** create a table for question bank, obsolete */
-function createtable_questionbank() {
-  var params = {
-    TableName: "questionbank",
-    KeySchema: [
-      {
-        AttributeName: "vid",
-        KeyType: "HASH",
-      },
-    ],
-    AttributeDefinitions: [
-      {
-        AttributeName: "vid",
-        AttributeType: "S",
-      },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 10,
-      WriteCapacityUnits: 10,
-    },
-  };
-
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error(
-        "Unable to create table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(
-        "Created table. Table description JSON:",
-        JSON.stringify(data, null, 2)
-      );
-    }
-  });
-}
-
-// createtable_questionbank();
-
-/** create an item */
 function createitem(table, item, req, res, callback) {
   var params = {
     TableName: table,
@@ -304,50 +112,28 @@ function createitem(table, item, req, res, callback) {
         JSON.stringify(err, null, 2)
       );
     } else {
-      if (callback) {
-        callback(data);
-      }
       if (res) {
         res.send(data);
+      }
+      if (callback) {
+        callback(data);
       }
       console.log("Added item:", data);
     }
   });
 }
 
-/** read an item */
-function readitem(table, uid, req, res, callback) {
-  var params = {
-    TableName: table,
-    Key: {
-      uid: uid,
-    },
-  };
+// createitem({
+//     uid: "testuid",
+//     testdata: "testdata"
+// })
 
-  docClient.get(params, function (err, data) {
-    if (err) {
-      console.error(
-        "Unable to read item. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      if (callback) {
-        callback(data);
-      }
-      if (res) {
-        res.send(data);
-      }
-      console.log("GetItem succeeded:", data);
-    }
-  });
-}
-/** read a video item */
-function readvideoitem(table, vid, req, res, callback) {
+function readitem(table, key, value, req, res, callback) {
+  var tempjson = {};
+  tempjson[key] = value;
   var params = {
     TableName: table,
-    Key: {
-      vid: vid,
-    },
+    Key: tempjson,
   };
 
   docClient.get(params, function (err, data) {
@@ -368,30 +154,20 @@ function readvideoitem(table, vid, req, res, callback) {
   });
 }
 
-// readitem('testuid')
+function queryitem(table, key, value, req, res, callback) {
+  var params = {
+    TableName: table,
+    KeyConditionExpression: "#key = :value",
+    ExpressionAttributeNames: {
+      "#key": key,
+    },
+    ExpressionAttributeValues: {
+      ":value": value,
+    },
+  };
 
-/** a query on aws */
-function awsquery(params, callback) {
-  docClient.query(params, function (err, data) {
-    if (err) {
-      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-    } else {
-      console.log("Query succeeded.");
-      if (callback) {
-        callback(data);
-      }
-      // data.Items.forEach(function (item) {
-      //     console.log(" -", item);
-      // });
-    }
-  });
-}
-
-/** scan all movies in aws server */
-function awsscan(params, callback) {
-  docClient.scan(params, onScan);
-
-  function onScan(err, data) {
+  console.log("Scanning Movies table.");
+  docClient.scan(params, function (err, data) {
     if (err) {
       console.error(
         "Unable to scan the table. Error JSON:",
@@ -400,10 +176,14 @@ function awsscan(params, callback) {
     } else {
       // print all the movies
       console.log("Scan succeeded.");
-      if (callback) callback(data);
-      // data.Items.forEach(function (result) {
-      //     console.log(result);
-      // });
+      data.Items.forEach(function (movie) {
+        console.log(
+          movie.year + ": ",
+          movie.title,
+          "- rating:",
+          movie.info.rating
+        );
+      });
 
       // continue scanning if we have more movies, because
       // scan can retrieve a maximum of 1MB of data
@@ -413,16 +193,14 @@ function awsscan(params, callback) {
         docClient.scan(params, onScan);
       }
     }
-  }
+  });
 }
 
+// readitem('testuid')
+
 exports.uploadToS3 = uploadToS3;
-exports.upload = uploadroute;
 exports.getphoto = getphotofroms3;
-// exports.createtable = createtable
+exports.createtable = createtable;
 exports.createitem = createitem;
 exports.readitem = readitem;
-exports.readvideoitem = readvideoitem;
-exports.cvupload = cvupload;
-exports.awsquery = awsquery;
-exports.awsscan = awsscan;
+exports.queryitem = queryitem;
