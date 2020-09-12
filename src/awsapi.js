@@ -1,12 +1,11 @@
 const AWS = require("aws-sdk");
+require('dotenv').config()
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const IAM_USER_KEY = process.env.IAM_USER_KEY;
 const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
-console.log(process.env)
-console.log(IAM_USER_KEY,IAM_USER_SECRET)
 /** config the region and access key, access id */
 AWS.config.update({
-  region: "ap-east-1",
+  region: "ap-southeast-1",
   accessKeyId: IAM_USER_KEY,
   secretAccessKey: IAM_USER_SECRET,
 });
@@ -14,8 +13,8 @@ AWS.config.update({
 const Busboy = require("busboy");
 
 let s3bucket = new AWS.S3({
-  // accessKeyId: IAM_USER_KEY,
-  // secretAccessKey: IAM_USER_SECRET,
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET,
   Bucket: BUCKET_NAME,
 });
 
@@ -96,7 +95,6 @@ function createtable(tablename, keyname) {
   });
 }
 
-// createtable('iguser', 'username')
 
 function createitem(table, item, req, res, callback) {
   var params = {
