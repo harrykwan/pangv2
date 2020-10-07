@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="en" class="no-js">
+
+<head>
+	<title>Studiare</title>
+
+	<meta charset="utf-8" />
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,500i,600,700&display=swap"
+		rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="css/studiare-assets.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/fonts/font-awesome/font-awesome.min.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/fonts/elegant-icons/style.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/fonts/iconfont/material-icons.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+	   https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyBhogOX8I2scewiC_lnXyQjijp-eOU9tT4",
+			authDomain: "pangv2-e5abb.firebaseapp.com",
+			databaseURL: "https://pangv2-e5abb.firebaseio.com",
+			projectId: "pangv2-e5abb",
+			storageBucket: "pangv2-e5abb.appspot.com",
+			messagingSenderId: "290827132623",
+			appId: "1:290827132623:web:6ba9c840b990ae555ee1ba",
+			measurementId: "G-QNBFYK0Y59",
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
+	<style>
+		.savechangebutton {
+			color: #fff;
+			text-align: center;
+			border: 0;
+			padding: 11px 22px;
+			vertical-align: bottom;
+			font-weight: 400;
+			font-size: 16px;
+			text-shadow: none;
+			display: inline-block;
+			background-color: #f9a134;
+			-webkit-border-radius: 50px;
+			-moz-border-radius: 50px;
+			-ms-border-radius: 50px;
+			border-radius: 50px;
+			transition: all 0.2s ease-in-out;
+			-moz-transition: all 0.2s ease-in-out;
+			-webkit-transition: all 0.2s ease-in-out;
+			-o-transition: all 0.2s ease-in-out;
+			cursor: pointer;
+		}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Container -->
+	<div id="vuecontainer">
+		<!-- Header
+		    ================================================== -->
+		<header class="clearfix">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container">
+					<a class="navbar-brand" href="index.html">
+						<img src="images/logo.svg" alt="" />
+					</a>
+
+					<a href="#" class="mobile-nav-toggle">
+						<span></span>
+					</a>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mr-auto">
+							<li class="drop-link">
+								<a class="active" href="index.html">Home</a>
+							</li>
+							<li class="drop-link">
+								<a href="about.html">Pages <i class="fa fa-angle-down"></i></a>
+								<ul class="dropdown">
+									<li><a href="about.html">About Us</a></li>
+									<li><a href="pricing.html">Pricing Packages</a></li>
+									<li><a href="portfolio.html">Portfolio</a></li>
+									<li><a href="single-project.html">Portfolio Single</a></li>
+									<li><a href="teachers.html">Teachers</a></li>
+									<li><a href="single-teacher.html">Teacher Single</a></li>
+									<li class="drop-link">
+										<a href="#">Submenu Level 1</a>
+										<ul class="dropdown level2">
+											<li><a href="#">Submenu Level 2</a></li>
+											<li class="drop-link">
+												<a href="#">Submenu Level 2</a>
+												<ul class="dropdown level2">
+													<li><a href="#">Submenu Level 3</a></li>
+													<li><a href="#">Submenu Level 3</a></li>
+												</ul>
+											</li>
+											<li><a href="#">Submenu Level 2</a></li>
+										</ul>
+									</li>
+									<li><a href="cart.html">Shopping Cart</a></li>
+									<li><a href="checkout.html">Checkout</a></li>
+								</ul>
+							</li>
+							<li class="drop-link">
+								<a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
+								<ul class="dropdown">
+									<li class="drop-link">
+										<a href="blog-list.html">Blog List</a>
+										<ul class="dropdown level2">
+											<li>
+												<a href="blog-list-leftsidebar.html">Blog List - Sidebar Left</a>
+											</li>
+											<li>
+												<a href="blog-list-rightsidebar.html">Blog List - Sidebar Right</a>
+											</li>
+											<li><a href="blog-list.html">No Sidebar</a></li>
+										</ul>
+									</li>
+									<li class="drop-link">
+										<a href="blog-grid-3.html">Blog Grid</a>
+										<ul class="dropdown level2">
+											<li><a href="blog-grid-3.html">3 Column</a></li>
+											<li><a href="blog-grid-4.html">4 Column</a></li>
+											<li>
+												<a href="blog-grid-leftsidebar.html">Sidebar Left</a>
+											</li>
+											<li>
+												<a href="blog-grid-rightsidebar.html">Sidebar Right</a>
+											</li>
+										</ul>
+									</li>
+									<li><a href="blog.html">Blog Classic</a></li>
+									<li><a href="single-post.html">Post Single</a></li>
+								</ul>
+							</li>
+							<li class="drop-link">
+								<a href="courses.html">Courses</a>
+							</li>
+							<li><a href="events.html">Events</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+						<a href="#" class="register-modal-opener login-button"><i
+								class="material-icons">perm_identity</i> Get Started</a>
+					</div>
+				</div>
+			</nav>
+
+			<div class="mobile-menu">
+				<div class="search-form-box">
+					<form class="search-form">
+						<input type="search" class="search-field" placeholder="Enter keyword..." />
+						<button type="submit" class="search-submit">
+							<i class="material-icons open-search">search</i>
+						</button>
+					</form>
+				</div>
+				<div class="shopping-cart-box">
+					<a class="shop-icon" href="cart.html">
+						<i class="material-icons">shopping_cart</i>
+						Cart
+						<span class="studiare-cart-number">0</span>
+					</a>
+				</div>
+				<nav class="mobile-nav">
+					<ul class="mobile-menu-list">
+						<li>
+							<a href="index.html">Home</a>
+						</li>
+						<li class="drop-link">
+							<a href="#">Pages</a>
+							<ul class="drop-level">
+								<li><a href="about.html">About Us</a></li>
+								<li><a href="pricing.html">Pricing Packages</a></li>
+								<li><a href="portfolio.html">Portfolio</a></li>
+								<li><a href="single-project.html">Portfolio Single</a></li>
+								<li><a href="teachers.html">Teachers</a></li>
+								<li><a href="single-teacher.html">Teacher Single</a></li>
+								<li><a href="cart.html">Shopping Cart</a></li>
+								<li><a href="checkout.html">Checkout</a></li>
+								<li><a href="single-teacher.html">Teacher Single</a></li>
+								<li class="drop-link">
+									<a href="#">Submenu Level 1</a>
+									<ul class="drop-level">
+										<li><a href="#">Submenu Level 2</a></li>
+										<li class="drop-link">
+											<a href="#">Submenu Level 2</a>
+											<ul class="drop-level">
+												<li><a href="#">Submenu Level 3</a></li>
+												<li><a href="#">Submenu Level 3</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Submenu Level 2</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="drop-link">
+							<a href="blog.html">Blog</a>
+							<ul class="drop-level">
+								<li class="drop-link">
+									<a href="blog-list.html">Blog List</a>
+									<ul class="drop-level">
+										<li>
+											<a href="blog-list-leftsidebar.html">Blog List - Sidebar Left</a>
+										</li>
+										<li>
+											<a href="blog-list-rightsidebar.html">Blog List - Sidebar Right</a>
+										</li>
+										<li><a href="blog-list.html">No Sidebar</a></li>
+									</ul>
+								</li>
+								<li class="drop-link">
+									<a href="blog-grid-3.html">Blog Grid</a>
+									<ul class="drop-level">
+										<li><a href="blog-grid-3.html">3 Column</a></li>
+										<li><a href="blog-grid-4.html">4 Column</a></li>
+										<li>
+											<a href="blog-grid-leftsidebar.html">Sidebar Left</a>
+										</li>
+										<li>
+											<a href="blog-grid-rightsidebar.html">Sidebar Right</a>
+										</li>
+									</ul>
+								</li>
+								<li><a href="blog.html">Blog Classic</a></li>
+								<li><a href="single-post.html">Post Single</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="courses.html">Courses</a>
+						</li>
+						<li>
+							<a href="events.html">Events</a>
+						</li>
+						<li>
+							<a href="contact.html">Contact</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		<!-- End Header -->
+
+		<!-- page-banner-section 
+			================================================== -->
+		<section class="page-banner-section">
+			<div class="container">
+				<h1>Setting</h1>
+				<!-- <ul class="page-depth">
+					<li><a href="index.html">Studiare</a></li>
+					<li><a href="checkout.html">Checkout</a></li>
+				</ul> -->
+			</div>
+		</section>
+		<!-- End page-banner-section -->
+
+		<!-- cart-section 
+			================================================== -->
+		<section class="cart-section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="cart-box">
+							<h2>Video details</h2>
+							<videocontent :title="videosaveddata.title" :photourl="videocontentdata.photourl"
+								:descrip="videosaveddata.descrip" :price="videosaveddata.price"
+								:subject="videosaveddata.subject" />
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="sidebar">
+							<div class="widget cart-widget">
+								<h2>Videos Uploaded</h2>
+
+								<sidetableview :videolistdata="videolistdata" />
+								<!-- <a href="#" class="checkout-button">Proceed to Paypal</a> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End cart section -->
+
+		<!-- footer 
+			================================================== -->
+		<footer>
+			<div class="container">
+				<div class="up-footer">
+					<div class="row">
+						<div class="col-lg-4 col-md-6">
+							<div class="footer-widget text-widget">
+								<a href="index.html" class="footer-logo"><img src="images/logo_light.svg" alt="" /></a>
+								<p>
+									We named our theme Studiare because to us,<br />
+									the best brands are simple ones. Brands thrive<br />
+									on their ability to be understood.
+								</p>
+								<ul>
+									<li>
+										<div class="contact-info-icon">
+											<i class="material-icons">location_on</i>
+										</div>
+										<div class="contact-info-value">
+											127 Elizabeth Street, NY New York
+										</div>
+									</li>
+									<li>
+										<div class="contact-info-icon">
+											<i class="material-icons">phone_android</i>
+										</div>
+										<div class="contact-info-value">+55-11-3097-0508</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-6">
+							<div class="footer-widget quick-widget">
+								<h2>Quick Links</h2>
+								<ul class="quick-list">
+									<li><a href="contact.html">Contact</a></li>
+									<li><a href="pricing.html">Pricing Packages</a></li>
+									<li><a href="about.html">About Us</a></li>
+									<li><a href="courses.html">Courses</a></li>
+									<li><a href="blog.html">News</a></li>
+									<li><a href="index.html">Home</a></li>
+									<li><a href="#">Sample Page</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-6">
+							<div class="footer-widget subscribe-widget">
+								<h2>Newsletter</h2>
+								<p>
+									Don’t miss anything, sign up now and keep informed about our
+									company.
+								</p>
+								<div class="newsletter-form">
+									<input class="form-control" type="email" name="EMAIL"
+										placeholder="Enter Your E-mail" required="" />
+									<input type="submit" value="Subscribe" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer-copyright copyrights-layout-default">
+				<div class="container">
+					<div class="copyright-inner">
+						<div class="copyright-cell">
+							&copy; 2019 <span class="highlight">Studiare</span>. Created by
+							CodeBean Team.
+						</div>
+						<div class="copyright-cell">
+							<ul class="studiare-social-links">
+								<li>
+									<a href="#" class="facebook"><i class="fa fa-facebook-f"></i></a>
+								</li>
+								<li>
+									<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+								</li>
+								<li>
+									<a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- End footer -->
+	</div>
+	<!-- End Container -->
+
+	<script type="text/x-template" id="videolistitem">
+		<tr v-bind:onclick="link">
+      	<td  class="name-pro">{{title}}</td>
+      	<td>{{price}}</td>
+      </tr>
+    </script>
+
+	<script type="text/x-template" id="videocontent">
+		<div>
+      	<img v-bind:src="photourl"><br><br>
+      	<form class="billing-details">
+
+      		<label>Title</label>
+      		<input id="titleinput" type="text" v-bind:value="title"/>
+
+      		<label>Description</label>
+      		<input id="descripinput" type="text"v-bind:value="descrip"/>
+
+
+      		<label>Price</label>
+      		<input id="priceinput" type="text" v-bind:value="price"/>
+
+
+      		<label>Subject</label>
+      		<input id="subjectinput" type="text" v-bind:value="subject"/>
+      	</form>
+
+      	<button onclick="savechanges()" class="savechangebutton">Save Changes</button>
+      </div>
+    </script>
+
+	<script type="text/x-template" id="sidetableview">
+		<table>
+        <tbody>
+      	<videolistitem
+      	  v-for="videoitem in videolistdata"
+      	  :key="videoitem.vid"
+      	  :link="videoitem.link"
+      	  :title="videoitem.title"
+      	  :price="videoitem.price"
+      	/>
+        </tbody>
+      </table>
+    </script>
+
+	<script>
+		const params = new URLSearchParams(window.location.search);
+		let vid = params.get("vid");
+
+		Vue.component("videolistitem", {
+			props: ["vid", "title", "price", "link"],
+			template: "#videolistitem",
+		});
+		Vue.component("videocontent", {
+			props: ["photourl", "title", "descrip", "price", "subject"],
+			template: "#videocontent",
+		});
+		Vue.component("sidetableview", {
+			props: ["videolistdata"],
+			template: "#sidetableview",
+		});
+
+		var app = new Vue({
+			el: "#vuecontainer",
+			data: {
+				videolistdata: [],
+				videocontentdata: [],
+			},
+			computed: {
+				videosaveddata: function () {
+					for (let j = 0; j < this.videolistdata.length; j++) {
+						if (this.videolistdata[j].vid == vid) {
+							return this.videolistdata[j];
+						}
+					}
+					return {};
+				},
+			},
+		});
+
+		var myid = "";
+		var myname = "";
+		firebase.auth().onAuthStateChanged(function (user) {
+			if (user) {
+				// User is signed in.
+				var displayName = user.displayName;
+				myname = displayName
+				var email = user.email;
+				var emailVerified = user.emailVerified;
+				var photoURL = user.photoURL;
+				var isAnonymous = user.isAnonymous;
+				var uid = user.uid;
+				var providerData = user.providerData;
+				// ...
+				myid = uid;
+				console.log(user);
+
+				getallvideo();
+				getvideodata();
+			} else {
+				// User is signed out.
+				// ...
+				window.location.href = "login";
+			}
+		});
+
+		//testing 460643426
+		function getvideodata() {
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === 4) {
+					// console.log(this.responseText);
+					let mydata = JSON.parse(this.responseText);
+					console.log(mydata);
+					let newdata = {
+						photourl: mydata.pictures.sizes[3].link,
+						time: mydata.modified_time,
+						iframe: mydata.embed.html,
+					};
+					console.log(newdata);
+					app.videocontentdata = newdata;
+				}
+			});
+
+			xhr.open("GET", "getvimeovideodata/" + vid);
+
+			xhr.send();
+		}
+
+		function getallvideo() {
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === 4) {
+					console.log(this.responseText);
+					let mydata = JSON.parse(this.responseText);
+					console.log(mydata);
+					// mydata = mydata.Items;
+					mydata.map((x) => {
+						if (!x.title) {
+							x.title = "Untitled";
+						}
+						if (!x.price) {
+							x.price = "0";
+						}
+						x.link = "window.location.href='videosetting?vid=" + x.vid + "'";
+					});
+					app.videolistdata = mydata;
+				}
+			});
+
+			xhr.open("GET", "getmyvideo/" + myid);
+
+			xhr.send();
+		}
+
+		function updatevideodata(mydata) {
+			console.log(mydata);
+			var data = JSON.stringify(mydata);
+
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === 4) {
+					console.log(this.responseText);
+					alert(this.responseText);
+					window.location.reload();
+				}
+			});
+
+			xhr.open("POST", "updatevideodata");
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			xhr.send(data);
+		}
+
+		function savechanges() {
+			const titleinput = document.getElementById("titleinput").value;
+			const descripinput = document.getElementById("descripinput").value;
+			const priceinput = document.getElementById("priceinput").value;
+			const subjectinput = document.getElementById("subjectinput").value;
+			let mydata = {
+				vid: vid,
+				uid: myid,
+				title: titleinput,
+				descrip: descripinput,
+				price: priceinput,
+				subject: subjectinput,
+				photourl: app.videocontentdata.photourl,
+				teacher: myname
+			};
+			// console.log(mydata);
+			updatevideodata(mydata);
+		}
+	</script>
+
+	<script src="js/studiare-plugins.min.js"></script>
+	<script src="js/jquery.countTo.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+	<script src="js/gmap3.min.js"></script>
+	<script src="js/script.js"></script>
+</body>
+
+</html>

@@ -1,39 +1,182 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>CodePen - File Upload &amp; Image Preview</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel="stylesheet" href="/uploadassests/style.css">
+  <link rel="stylesheet" href="/uploadassests/style.css">
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyBhogOX8I2scewiC_lnXyQjijp-eOU9tT4",
+      authDomain: "pangv2-e5abb.firebaseapp.com",
+      databaseURL: "https://pangv2-e5abb.firebaseio.com",
+      projectId: "pangv2-e5abb",
+      storageBucket: "pangv2-e5abb.appspot.com",
+      messagingSenderId: "290827132623",
+      appId: "1:290827132623:web:6ba9c840b990ae555ee1ba",
+      measurementId: "G-QNBFYK0Y59",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+  <style>
+    .loading {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, .5);
+    }
 
+    .loading-wheel {
+      width: 20px;
+      height: 20px;
+      margin-top: -40px;
+      margin-left: -40px;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      border-width: 30px;
+      border-radius: 50%;
+      -webkit-animation: spin 1s linear infinite;
+    }
+
+    .style-2 .loading-wheel {
+      border-style: double;
+      border-color: #ccc transparent;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0);
+      }
+
+      100% {
+        -webkit-transform: rotate(-360deg);
+      }
+    }
+  </style>
 </head>
+
 <body>
-<!-- partial:index.partial.html -->
-<h2>File Upload & Image Preview</h2>
-<p class="lead">No Plugins <b>Just Javascript</b></p>
 
-<!-- Upload  -->
-<form id="file-upload-form" class="uploader">
-  <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
+  <!-- partial:index.partial.html -->
+  <h2>File Upload & Image Preview</h2>
+  <p class="lead">No Plugins <b>Just Javascript</b></p>
 
-  <label for="file-upload" id="file-drag">
-    <img id="file-image" src="#" alt="Preview" class="hidden">
-    <div id="start">
-      <i class="fa fa-download" aria-hidden="true"></i>
-      <div>Select a file or drag here</div>
-      <div id="notimage" class="hidden">Please select an image</div>
-      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-    </div>
-    <div id="response" class="hidden">
-      <div id="messages"></div>
-      <progress class="progress" id="file-progress" value="0">
-        <span>0</span>%
-      </progress>
-    </div>
-  </label>
-</form>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script><script  src="/uploadassests/script.js"></script>
+  <!-- Upload  -->
+  <form id="file-upload-form" class="uploader">
+    <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
+
+    <label for="file-upload" id="file-drag">
+      <img id="file-image" src="#" alt="Preview" class="hidden">
+      <div id="start">
+        <i class="fa fa-download" aria-hidden="true"></i>
+        <div>Select a file or drag here</div>
+        <div id="notimage" class="hidden">Please select an image</div>
+        <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
+      </div>
+      <div id="response" class="hidden">
+        <div id="messages"></div>
+        <progress class="progress" id="file-progress" value="0">
+          <span>0</span>%
+        </progress>
+      </div>
+    </label>
+  </form>
+  <div id="loadingarea" hidden class="loading style-2">
+    <div class="loading-wheel"></div>
+  </div>
+  <script>
+    let myuid;
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        myuid = uid
+        var providerData = user.providerData;
+        // ...
+        console.log(user);
+        console.log(email)
+        // window.location.href = "/";
+      } else {
+        // User is signed out.
+        // ...
+        window.location.href = "/login"
+      }
+    });
+
+    function login(myemail, mypw) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(myemail, mypw)
+        .then(function () {})
+        .catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorMessage);
+          alert(errorMessage)
+          // ...
+        });
+    }
+
+    function submitlogin() {
+      var myusername = document.getElementById("myusername").value;
+      var mypw = document.getElementById("mypw").value;
+      login(myusername, mypw);
+    }
+
+    function uploadvideo(myfile) {
+      document.getElementById('loadingarea').hidden = false
+      console.log(myfile)
+      var data = new FormData();
+      data.append("file", myfile);
+      data.append("uid", myuid);
+
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          console.log(this.responseText);
+          let myresult = this.responseText;
+          myresult = myresult.split('/')
+          myresult = myresult[myresult.length - 1]
+          console.log(myresult)
+          window.location.href = "/videosetting?vid=" + myresult
+        }
+      });
+
+      xhr.open("POST", "/uploadtoviemo");
+
+      xhr.send(data);
+    }
+  </script>
+  <!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+  <script src="/uploadassests/script.js"></script>
 
 </body>
+
 </html>

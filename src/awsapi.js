@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-require('dotenv').config()
+require("dotenv").config();
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const IAM_USER_KEY = process.env.IAM_USER_KEY;
 const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
@@ -95,7 +95,6 @@ function createtable(tablename, keyname) {
   });
 }
 
-
 function createitem(table, item, req, res, callback) {
   var params = {
     TableName: table,
@@ -126,7 +125,7 @@ function createitem(table, item, req, res, callback) {
 //     testdata: "testdata"
 // })
 
-function readitem(table, key, value, req, res, callback) {
+function readitem(table, key, value, req, res, callback, errcallback) {
   var tempjson = {};
   tempjson[key] = value;
   var params = {
@@ -136,10 +135,13 @@ function readitem(table, key, value, req, res, callback) {
 
   docClient.get(params, function (err, data) {
     if (err) {
-      console.error(
-        "Unable to read item. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
+      // console.error(
+      //   "Unable to read item. Error JSON:",
+      //   JSON.stringify(err, null, 2)
+      // );
+      if (errcallback) {
+        errcallback(err);
+      }
     } else {
       if (callback) {
         callback(data);
@@ -194,6 +196,74 @@ function queryitem(table, key, value, req, res, callback) {
   });
 }
 
+function scandata(table, key, value, callback) {
+  var params = {
+    TableName: table,
+    FilterExpression: "#key = :value",
+    ExpressionAttributeNames: {
+      "#key": key,
+    },
+    ExpressionAttributeValues: {
+      ":value": value,
+    },
+  };
+
+  docClient.scan(params, function (err, data) {
+    if (err) {
+      console.error("Unable to scan. Error:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("scan succeeded.");
+      // data.Items.forEach(function (item) {
+      //     console.log(" -", item.year + ": " + item.title);
+      // });
+      if (callback) {
+        callback(data.Items);
+      }
+    }
+  });
+}
+
+function getallitem(table, startkey, callback) {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: table,
+    // FilterExpression: "#user_status = :user_status_val",
+    // ExpressionAttributeNames: {
+    //   "#user_status": "user_status",
+    // },
+    // ExpressionAttributeValues: { ":user_status_val": "somestatus" },
+  };
+
+  if (startkey) {
+    params.ExclusiveStartKey = startkey;
+  }
+
+  docClient.scan(params, onScan);
+
+  function onScan(err, data) {
+    if (err) {
+      console.error(
+        "Unable to scan the table. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+    } else {
+      console.log("Scan succeeded.");
+      data.Items.forEach(function (itemdata) {
+        console.log(JSON.stringify(itemdata));
+      });
+
+      callback(data.LastEvaluatedKey, data.Items);
+      // continue scanning if we have more items
+      if (typeof data.LastEvaluatedKey != "undefined") {
+        console.log("Scanning for more...");
+        // callback(data.LastEvaluatedKey);
+        // params.ExclusiveStartKey = data.LastEvaluatedKey;
+        // docClient.scan(params, onScan);
+      }
+    }
+  }
+}
 // readitem('testuid')
 
 exports.uploadToS3 = uploadToS3;
@@ -202,3 +272,5 @@ exports.createtable = createtable;
 exports.createitem = createitem;
 exports.readitem = readitem;
 exports.queryitem = queryitem;
+exports.scandata = scandata;
+exports.getallitem = getallitem;

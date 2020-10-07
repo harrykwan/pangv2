@@ -18,11 +18,33 @@
   <link rel="stylesheet" type="text/css" href="css/fonts/iconfont/material-icons.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyBhogOX8I2scewiC_lnXyQjijp-eOU9tT4",
+      authDomain: "pangv2-e5abb.firebaseapp.com",
+      databaseURL: "https://pangv2-e5abb.firebaseio.com",
+      projectId: "pangv2-e5abb",
+      storageBucket: "pangv2-e5abb.appspot.com",
+      messagingSenderId: "290827132623",
+      appId: "1:290827132623:web:6ba9c840b990ae555ee1ba",
+      measurementId: "G-QNBFYK0Y59",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
 </head>
 
 <body>
   <!-- Container -->
-  <div id="container">
+  <div id="vuecontainer">
     <!-- Header
 		    ================================================== -->
     <header class="clearfix">
@@ -198,8 +220,7 @@
 
             <div class="row">
               <coursecard v-for="coursedata in allcoursedata" :key="coursedata.key" :title="coursedata.title"
-                :photourl="coursedata.photourl" :teacher="coursedata.teacher" :subject="coursedata.subject"
-                :price="coursedata.price">
+                :photourl="coursedata.photourl" :teacher="coursedata.teacher" :price="coursedata.price">
             </div>
           </div>
 
@@ -208,10 +229,8 @@
               <div class="category-widget widget">
                 <h2>Product categories</h2>
                 <ul class="category-list">
-                  <!-- <li><a href="#">中文</a></li>
-                  <li><a href="#">通識</a></li> -->
-                  <li><a onclick="filtersubject('all')">All</a></li>
-                  <sidebaritem v-for="item in sidebardata" :myonclick="item.myonclick" :subject="item.subject" />
+                  <li><a href="#">中文</a></li>
+                  <li><a href="#">通識</a></li>
                 </ul>
               </div>
 
@@ -379,7 +398,7 @@
       					<a href="single-course.html">{{title}}</a>
       				</h2>
       				<div class="course-rating-teacher">
-      					<a :href="teacherlink" class="course-loop-teacher">{{teacher}}</a>
+      					<a href="#" class="course-loop-teacher">{{teacher}}</a>
       				</div>
       			</div>
       			<div class="course-content-bottom">
@@ -396,26 +415,41 @@
     </script>
 
 
-  <script type="text/x-template" id="sidebaritem">
-    <li><a :onclick="myonclick">{{subject}}</a></li>
+  <script>
+    var myid = ''
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        var providerData = user.providerData;
+        // ...
+        myid = uid;
+        console.log(user);
+
+      } else {
+        // User is signed out.
+        // ...
+        window.location.href = "login"
+      }
+    });
   </script>
+
 
   <script>
     Vue.component("coursecard", {
-      props: ["title", "photourl", "price", "teacher", "subject", "teacherlink"],
+      props: ["title", "photourl", "price", "teacher"],
       template: "#coursecard",
     });
 
-    Vue.component("sidebaritem", {
-      props: ["myonclick", "subject"],
-      template: "#sidebaritem",
-    });
-
     var app = new Vue({
-      el: "#container",
+      el: "#vuecontainer",
       data: {
-        allcoursedata: [],
-        sidebardata: []
+        allcoursedata: []
       },
       computed: {
         resultnum: function () {
@@ -425,7 +459,6 @@
     });
 
 
-    let allvideodata = []
 
     function getallvideo() {
       var xhr = new XMLHttpRequest();
@@ -435,32 +468,17 @@
         if (this.readyState === 4) {
           // console.log(this.responseText);
           let mydata = JSON.parse(this.responseText).body
-          let allsubject = []
           // console.log(mydata)
           const finaldata = mydata.map((x, index) => {
-            if (x.subject)
-              allsubject[x.subject] = 1
             return {
               key: index,
               title: x.title,
               photourl: x.photourl,
               price: x.price,
-              teacher: x.teacher,
-              teacherlink: "single-teacher/" + x.teacher,
-              subject: x.subject
+              teacher: ""
             }
-          })
 
-          let subjectlist = []
-          for (var j in allsubject) {
-            subjectlist.push({
-              subject: j,
-              myonclick: `filtersubject('` + j + `')`
-            })
-          }
-          console.log(subjectlist)
-          allvideodata = finaldata
-          app.sidebardata = subjectlist
+          })
           app.allcoursedata = finaldata
           console.log(finaldata)
         }
@@ -472,23 +490,6 @@
     }
 
     getallvideo()
-
-
-    function filtersubject(subject) {
-      console.log(subject)
-      if (subject == 'all') {
-        app.allcoursedata = allvideodata
-        return
-      }
-      const updatedata = []
-      allvideodata.map(x => {
-        if (x.subject == subject) {
-          updatedata.push(x)
-        }
-      })
-      console.log(updatedata)
-      app.allcoursedata = updatedata
-    }
   </script>
 
   <script src="js/studiare-plugins.min.js"></script>
