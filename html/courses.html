@@ -199,7 +199,7 @@
             <div class="row">
               <coursecard v-for="coursedata in allcoursedata" :key="coursedata.key" :title="coursedata.title"
                 :photourl="coursedata.photourl" :teacher="coursedata.teacher" :subject="coursedata.subject"
-                :price="coursedata.price">
+                :price="coursedata.price" :linkurl="coursedata.linkurl">
             </div>
           </div>
 
@@ -369,14 +369,14 @@
     <div class="col-lg-4 col-md-6 col-sm-6">
       	<div class="course-post">
       		<div class="course-thumbnail-holder">
-      			<a href="single-course.html">
+      			<a v-bind:href="linkurl">
       				<img v-bind:src="photourl" alt="">
       			</a>
-      		</div>
+          </div>
       		<div class="course-content-holder">
       			<div class="course-content-main">
       				<h2 class="course-title">
-      					<a href="single-course.html">{{title}}</a>
+      					<a  v-bind:href="linkurl">{{title}}</a>
       				</h2>
       				<div class="course-rating-teacher">
       					<a :href="teacherlink" class="course-loop-teacher">{{teacher}}</a>
@@ -402,7 +402,7 @@
 
   <script>
     Vue.component("coursecard", {
-      props: ["title", "photourl", "price", "teacher", "subject", "teacherlink"],
+      props: ["title", "photourl", "price", "teacher", "subject", "teacherlink", "linkurl"],
       template: "#coursecard",
     });
 
@@ -447,7 +447,8 @@
               price: x.price,
               teacher: x.teacher,
               teacherlink: "single-teacher/" + x.teacher,
-              subject: x.subject
+              subject: x.subject,
+              linkurl: "paycourse?vid=" + x.vid
             }
           })
 

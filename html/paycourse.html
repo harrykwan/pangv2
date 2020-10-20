@@ -13,19 +13,40 @@
 	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,500i,600,700&display=swap"
 		rel="stylesheet">
 
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<link rel="stylesheet" href="css/studiare-assets.min.css">
 	<link rel="stylesheet" type="text/css" href="css/fonts/font-awesome/font-awesome.min.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="css/fonts/elegant-icons/style.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="css/fonts/iconfont/material-icons.css" media="screen">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+	   https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
 
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyBhogOX8I2scewiC_lnXyQjijp-eOU9tT4",
+			authDomain: "pangv2-e5abb.firebaseapp.com",
+			databaseURL: "https://pangv2-e5abb.firebaseio.com",
+			projectId: "pangv2-e5abb",
+			storageBucket: "pangv2-e5abb.appspot.com",
+			messagingSenderId: "290827132623",
+			appId: "1:290827132623:web:6ba9c840b990ae555ee1ba",
+			measurementId: "G-QNBFYK0Y59",
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
 </head>
 
 <body>
 
 	<!-- Container -->
-	<div id="container">
+	<div id="vuecontainer">
 		<!-- Header
 		    ================================================== -->
 		<header class="clearfix">
@@ -239,10 +260,10 @@
 			================================================== -->
 		<section class="page-banner-section">
 			<div class="container">
-				<h1>Cart</h1>
+				<h1>Checkout</h1>
 				<ul class="page-depth">
 					<li><a href="index.html">Studiare</a></li>
-					<li><a href="cart.html">Cart</a></li>
+					<li><a href="checkout.html">Checkout</a></li>
 				</ul>
 			</div>
 		</section>
@@ -253,28 +274,65 @@
 		<section class="cart-section">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-12">
+					<div class="col-lg-6">
 						<div class="cart-box">
-							<waitlisttable :waitlistdata="waitlistdata" />
+							<h2>Payment method</h2>
+							<div>
+								<img style="width: 100%;" src=" payme.jpg">
+							</div>
+							<form class="billing-details" hidden>
+								<div class="row">
+									<div class="col-lg-6">
+										<label for="first-name">First Name*</label>
+										<input type="text" id="first-name" />
+									</div>
+									<div class="col-lg-6">
+										<label for="last-name">Last Name*</label>
+										<input type="text" id="last-name" />
+									</div>
+								</div>
+								<label for="company-name">Company name (optional)</label>
+								<input type="text" id="company-name" />
+								<label for="country">Country*</label>
+								<select id="country">
+									<option>Country...</option>
+									<option>Albania</option>
+									<option>USA</option>
+									<option>Canada</option>
+									<option>Brazil</option>
+									<option>Germany</option>
+									<option>England</option>
+									<option>France</option>
+									<option>Italy</option>
+									<option>Australia</option>
+								</select>
+								<label for="street-name">Street address *</label>
+								<input type="text" id="street-name" placeholder="House number and street name" />
+								<input type="text" id="street-name2"
+									placeholder="Apartment, suite, unit etc. (optional)" />
+								<label for="city-name">Town / City*</label>
+								<input type="text" id="city-name" />
+								<label for="state-name">State / Country*</label>
+								<input type="text" id="state-name" />
+								<label for="postcode-name">Postcode / Zip*</label>
+								<input type="text" id="postcode-name" />
+								<label for="phone-name">Phone*</label>
+								<input type="text" id="phone-name" />
+								<label for="email-address">Email Address*</label>
+								<input type="text" id="email-address" />
+								<h2>Additional information</h2>
+								<label for="notes">Order notes (optional)</label>
+								<textarea id="notes"
+									placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+							</form>
 						</div>
 					</div>
-					<div class="col-lg-4" hidden>
+					<div class="col-lg-6">
 						<div class="sidebar">
 							<div class="widget cart-widget">
-								<h2>Cart Totals</h2>
-								<table>
-									<tbody>
-										<tr class="cart-subtotal">
-											<th>Subtotal</th>
-											<td>273.99</td>
-										</tr>
-										<tr class="order-total">
-											<th>Total</th>
-											<td>273.99</td>
-										</tr>
-									</tbody>
-								</table>
-								<a href="checkout.html" class="checkout-button">Proceed to checkout</a>
+								<h2>Your order</h2>
+								<Ordertable :orderdata="orderdata" />
+								<!-- <a href="#" class="checkout-button">Request Video</a> -->
 							</div>
 						</div>
 					</div>
@@ -367,157 +425,122 @@
 
 	</div>
 	<!-- End Container -->
-	<script type="text/x-template" id="waitlistitem">
-		<tr>
-			<td class="product-remove">
-				<a class="remove">×</a>
-			</td>
-			<td class="product-thumbnail">
-				<a><img :src="photourl" alt=""></a>
-			</td>
-			<td class="product-name">
-				<a>{{title}}</a>
-			</td>
-			<td class="product-price">
-				${{price}}
-			</td>
-			<td class="product-quantity">
-				{{subject}}
-			</td>
-			<td class="product-subtotal">
-				{{buyer}}
-			</td>
-			<td class="product-subtotal">
-				<button type="submit" :onclick="approvepayment">Approve</button>
-			</td>
-		</tr>
-	</script>
 
-	<script type="text/x-template" id="waitlisttable">
-		<table class="shop_table table-responsive">
-			<thead>
-				<tr>
-					<th class="product-remove">&nbsp;</th>
-					<th class="product-thumbnail">&nbsp;</th>
-					<th class="product-name">Video</th>
-					<th class="product-price">Price</th>
-					<th class="product-quantity">Subject</th>
-					<th class="product-subtotal">Buyer</th>
-					<th class="product-remove">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<waitlistitem v-for="item in waitlistdata" :title="item.title" :price="item.price"
-					:buyer="item.buyer" :subject="item.subject" :photourl="item.photourl" :approvepayment="item.approvepayment" />
-				<tr class="coupon-line">
-					<td hidden colspan="6" class="actions">
-						<input type="text" name="coupon_code" placeholder="Coupon code">
-						<button type="submit">Update cart</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<script type="text/x-template" id="Ordertable">
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td>Product</td>
+						<td>Total</td>
+					</tr>
+					<tr>
+						<td class="name-pro">{{orderdata.title}}</td>
+						<td>${{orderdata.price}}</td>
+					</tr>
+				
+				</tbody>
+			</table>
+			<a onclick="buyvideo()" class="checkout-button">Proceed</a>
+		</div>
 	</script>
 
 	<script>
-		const approvepayment = (itemnum) => {
-			addtouservideo(app.waitlistdata[itemnum], function () {
-				deleterequest(app.waitlistdata[itemnum].rid, function () {
-					alert('ok')
-					getallvideo()
-				})
-			})
-		}
+		var myid = "";
+		var myname = "";
+		firebase.auth().onAuthStateChanged(function (user) {
+			if (user) {
+				// User is signed in.
+				var displayName = user.displayName;
+				myname = displayName
+				var email = user.email;
+				var emailVerified = user.emailVerified;
+				var photoURL = user.photoURL;
+				var isAnonymous = user.isAnonymous;
+				var uid = user.uid;
+				var providerData = user.providerData;
+				// ...
+				myid = uid;
+				console.log(user);
 
-		Vue.component("waitlistitem", {
-			props: ["title", "price", "photourl", "subject", "buyer", "approvepayment"],
-			template: "#waitlistitem",
+
+			} else {
+				// User is signed out.
+				// ...
+				window.location.href = "login";
+			}
 		});
 
-		Vue.component("waitlisttable", {
-			props: ["waitlistdata"],
-			template: "#waitlisttable",
+		Vue.component("Ordertable", {
+			props: ["orderdata"],
+			template: "#Ordertable",
 		});
 
 		var app = new Vue({
-			el: "#container",
+			el: "#vuecontainer",
 			data: {
-				waitlistdata: []
+				orderdata: {}
 			},
 			computed: {
 
 			},
-			methods: {
-
-			}
 		});
 
 
-		function getallvideo() {
+
+		const params = new URLSearchParams(window.location.search);
+		let vid = params.get("vid");
+		console.log(vid)
+		let videodata;
+
+		function getvideodata() {
+
 			var xhr = new XMLHttpRequest();
 			xhr.withCredentials = true;
 
 			xhr.addEventListener("readystatechange", function () {
 				if (this.readyState === 4) {
 					console.log(this.responseText);
-					let mydata = JSON.parse(this.responseText);
-					mydata = mydata.body
-					for (var j = 0; j < mydata.length; j++) {
-						mydata[j].approvepayment = "approvepayment(" + j + ")"
-					}
-					console.log(mydata)
-					app.waitlistdata = mydata
+					let mydata = JSON.parse(this.responseText)
+					app.orderdata = mydata[0]
+					videodata = mydata[0]
 				}
 			});
 
-			xhr.open("GET", "getallitem/requestvideo/0");
+			xhr.open("GET", "getvideodata/" + vid);
 
 			xhr.send();
 		}
-		getallvideo()
+		getvideodata()
 
-		function addtouservideo(newvideodata, callback) {
-			var data = JSON.stringify(newvideodata);
+		function buyvideo() {
+			const myrespond = prompt("Please leave your phone number or Payme account name to confirm the payment.")
+			if (myrespond) {
 
-			var xhr = new XMLHttpRequest();
-			xhr.withCredentials = true;
+				var data = videodata
+				data.buyer = myrespond
+				data.rid = data.vid + '-' + data.uid
 
-			xhr.addEventListener("readystatechange", function () {
-				if (this.readyState === 4) {
-					console.log(this.responseText);
-					if (callback)
-						callback()
-				}
-			});
+				console.log(data)
+				data = JSON.stringify(data)
 
-			xhr.open("POST", "addvideotouser");
-			xhr.setRequestHeader("Content-Type", "application/json");
+				var xhr = new XMLHttpRequest();
+				xhr.withCredentials = true;
 
-			xhr.send(data);
-		}
+				xhr.addEventListener("readystatechange", function () {
+					if (this.readyState === 4) {
+						console.log(this.responseText);
+						alert(this.responseText)
+						window.location.href = "mycourse"
+					}
+				});
 
+				xhr.open("POST", "requestvideo");
+				xhr.setRequestHeader("Content-Type", "application/json");
 
-		function deleterequest(rid, callback) {
-			var data = JSON.stringify({
-				"rid": rid
-			});
+				xhr.send(data);
+			}
 
-			var xhr = new XMLHttpRequest();
-			xhr.withCredentials = true;
-
-			xhr.addEventListener("readystatechange", function () {
-				if (this.readyState === 4) {
-					console.log(this.responseText);
-					// alert('ok')
-					if (callback)
-						callback()
-				}
-			});
-
-			xhr.open("POST", "acceptrequest");
-			xhr.setRequestHeader("Content-Type", "application/json");
-
-			xhr.send(data);
 		}
 	</script>
 	<script src="js/studiare-plugins.min.js"></script>

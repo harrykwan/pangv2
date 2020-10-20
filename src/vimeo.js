@@ -1,17 +1,17 @@
+require("dotenv").config();
 const request = require("request");
 
 let Vimeo = require("vimeo").Vimeo;
 let client = new Vimeo(
-  "acb217d399dc971dd4b8340b85a8f180e08d8a11",
-  "qINaTW4HgHVEdaHkG9PEQTcSm+1Rf/hp7VAuLuUYhtK+4U9kaW8DVXxgfDWQSWXuqgTm5x5umQryeD1h3B2P6JWVbfh4rF3ZhzC4EC/JHI0AxLNiun2lfI8dmWb93eJC",
-  "c59cf735b2ba123e00c4938e74b2238a"
+  process.env.VIMEO_CLIENT_ID,
+  process.env.VIMEO_CLIENT_SECRET,
+  process.env.IMEO_ACCESS_TOKEN
 );
 const axios = require("axios");
 
 function upload(filepath, filename, filedes, req, res, callback) {
   client.upload(
-    filepath,
-    {
+    filepath, {
       name: filename,
       description: filedes,
     },
@@ -63,8 +63,7 @@ function getallvideo(req, res) {
 
   var config = {
     method: "get",
-    url:
-      "https://api.vimeo.com/me/videos?fields=name,uri,embed.html&per_page=100",
+    url: "https://api.vimeo.com/me/videos?fields=name,uri,embed.html&per_page=100",
     headers: {
       Authorization: "bearer c59cf735b2ba123e00c4938e74b2238a",
       "Content-Type": "application/json",

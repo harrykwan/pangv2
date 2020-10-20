@@ -1,4 +1,5 @@
 // const stripe = require('stripe')('sk_test_CRl2Sto6lG7ZEjnvDIfJxtZx00uRtS3tJx');
+require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 /** get the transaction amount, currency expected to be hkd, and a callback function */

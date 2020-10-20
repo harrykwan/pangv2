@@ -62,18 +62,14 @@ function getphotofroms3(x, req, res) {
 function createtable(tablename, keyname) {
   var params = {
     TableName: tablename,
-    KeySchema: [
-      {
-        AttributeName: keyname,
-        KeyType: "HASH",
-      },
-    ],
-    AttributeDefinitions: [
-      {
-        AttributeName: keyname,
-        AttributeType: "S",
-      },
-    ],
+    KeySchema: [{
+      AttributeName: keyname,
+      KeyType: "HASH",
+    }, ],
+    AttributeDefinitions: [{
+      AttributeName: keyname,
+      AttributeType: "S",
+    }, ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 10,
       WriteCapacityUnits: 10,
@@ -223,6 +219,27 @@ function scandata(table, key, value, callback) {
   });
 }
 
+function deleteitem(table, key, value, callback) {
+  var tempjson = {};
+  tempjson[key] = value;
+  var params = {
+    TableName: table,
+    Key: tempjson,
+  };
+
+  console.log("Attempting a conditional delete...");
+  docClient.delete(params, function (err, data) {
+    if (err) {
+      console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("DeleteItem succeeded:");
+      if (callback) {
+        callback(data)
+      }
+    }
+  });
+}
+
 function getallitem(table, startkey, callback) {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -271,6 +288,7 @@ exports.getphoto = getphotofroms3;
 exports.createtable = createtable;
 exports.createitem = createitem;
 exports.readitem = readitem;
+exports.deleteitem = deleteitem;
 exports.queryitem = queryitem;
 exports.scandata = scandata;
 exports.getallitem = getallitem;
